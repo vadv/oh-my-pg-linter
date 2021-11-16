@@ -19,8 +19,7 @@ jobs:
     - name: Install deps
       run: sudo apt update && sudo apt install -y curl sudo luarocks make && \
         sudo luarocks install luacheck && \
-        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.43.0 && \
-        sudo install $(go env GOPATH)/bin/golangci-lint /usr/bin
+        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.43.0
 
     - name: Run tests
       run: make test
