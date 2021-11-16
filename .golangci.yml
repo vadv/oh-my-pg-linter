@@ -1,0 +1,113 @@
+linters:
+  enable-all: false
+  enable:
+    - deadcode
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - structcheck
+    - unused
+    - varcheck
+    - asciicheck
+    - bodyclose
+    - depguard
+    - dogsled
+    - dupl
+    - exhaustive
+    - exportloopref
+    - gochecknoinits
+    - gocognit
+    - gocyclo
+    - godot
+    - gofmt
+    - goheader
+    - goimports
+    - golint
+    - gomodguard
+    - goprintffuncname
+    - gosec
+    - interfacer
+    - lll
+    - maligned
+    - misspell
+    - nakedret
+    - nestif
+    - noctx
+    - nolintlint
+    - prealloc
+    - rowserrcheck
+    - scopelint
+    - sqlclosecheck
+    - stylecheck
+    - testpackage
+    - unconvert
+    - unparam
+    - whitespace
+
+linters-settings:
+  govet:
+    check-shadowing: true
+  golint:
+    min-confidence: 0
+  gocyclo:
+    min-complexity: 20
+  maligned:
+    suggest-new: true
+  dupl:
+    threshold: 100
+  goconst:
+    min-len: 2
+    min-occurrences: 2
+  lll:
+    line-length: 140
+  funlen:
+    lines: 130
+    statements: 70
+  testpackage:
+    skip-regexp: plugin_test\.go
+
+issues:
+  exclude-rules:
+    - path: mock # We avoid warnings about comments for package and public functions in mock package.
+      linters:
+        - golint
+    - path: _test\.go
+      linters:
+        - goconst
+        - scopelint # To avoid warnings in table-driven tests combined with t.Run
+        - gochecknoglobals
+        - funlen
+        - dupl
+        - govet
+        - staticcheck
+        - gocyclo
+        - errcheck
+        - nlreturn
+        - interfacer
+  exclude-use-default: false
+  exclude:
+    # golint: Package comment check for every file
+    - should have a package comment, unless
+
+    # govet: Common false positives
+    - (possible misuse of unsafe.Pointer|should have signature)
+
+    # gosec: Too many false-positives on 'unsafe' usage
+    - Use of unsafe calls should be audited
+
+    # gosec: Too many false-positives for parametrized shell calls
+    - Subprocess launch(ed with variable|ing should be audited)
+
+    # gosec: Duplicated errcheck checks
+    - G104
+
+    # gosec: Too many issues in popular repos
+    - (Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)
+
+    # gosec: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
+    - Potential file inclusion via variable
+
+    # gochecknoglobals: allow version variable
+    - "`version` is a global variable"
