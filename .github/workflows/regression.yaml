@@ -17,8 +17,7 @@ jobs:
         go-version: 1.16
 
     - name: Install deps
-      run: sudo apt update && sudo apt install -y curl sudo luarocks make && \
-        sudo luarocks install luacheck
+      run: sudo apt update && sudo apt install -y curl sudo luarocks make && sudo luarocks install luacheck
 
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v2
