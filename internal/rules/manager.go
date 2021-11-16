@@ -212,7 +212,6 @@ func (m *manager) Test(rule string) error {
 		} else if luaVal.Type() == lua.LTNil {
 			passed = true
 		} else {
-			passed = false
 			panic(fmt.Errorf("unexcepted type of result check function: %#v", luaVal))
 		}
 		if passed != mustPassed {

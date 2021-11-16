@@ -49,7 +49,7 @@ func Check() *cobra.Command {
 }
 
 func getListFiles(args []string) ([]string, error) {
-	var result []string
+	result := make([]string, 0)
 	for _, arg := range args {
 		files, err := filepath.Glob(arg)
 		if err != nil {
