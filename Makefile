@@ -14,7 +14,7 @@ test-rules: build
 build:
 	go build -o ./bin/oh-my-pg-linter ./cmd
 
-test: lint test-rules
+test: lua-lint test-rules
 	go test ./... -v -race
 
 install: build
