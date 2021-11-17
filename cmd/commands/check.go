@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	markdown "github.com/MichaelMure/go-term-markdown"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/vadv/oh-my-pg-linter/internal/rules"
@@ -39,13 +40,16 @@ func Check() *cobra.Command {
 					if check.Query() != nil {
 						q = strings.Trim(strings.Trim(*check.Query(), " "), "\n")
 					}
-					fmt.Printf("%s:\n\tcheck rule `%s`\n\tquery: `%s`\n%s\n",
-						f, r, q, check.Message())
+					data := markdown.Render(fmt.Sprintf("%s\n\trule: `%s`\n\tquery: `%s`\n%s\n",
+						f, r, q, check.Message()), 120, 2)
+					fmt.Printf("%s\n", data)
 					errorCount++
 				}
 			}
 		}
 		if errorCount != 0 {
+			fmt.Printf("%s\n", strings.Repeat("-", 20))
+			fmt.Printf("Found %d errors.\n", errorCount)
 			os.Exit(errorCount)
 		}
 	}

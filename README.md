@@ -9,7 +9,11 @@ oh-my-pg-linter --rules=/etc/oh-my-pg-linter/rules check ./migrations/*.sql
 Проверить тесты:
 
 ```shell
-oh-my-pg-linter --rules=/etc/oh-my-pg-linter/rules test gin_fast_update
+oh-my-pg-linter --rules=/etc/oh-my-pg-linter/rules test ban-gin-fast-update
+```
+
+```shell
+oh-my-pg-linter --rules=/etc/oh-my-pg-linter/rules test-all
 ```
 
 Запустить lua-файл:

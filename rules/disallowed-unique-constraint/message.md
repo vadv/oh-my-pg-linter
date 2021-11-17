@@ -1,8 +1,8 @@
 Adding a `UNIQUE` constraint requires an `ACCESS EXCLUSIVE` lock which blocks reads.
 
-Instead create an index CONCURRENTLY and create the CONSTRAINT USING the index.
+Instead create an index `CONCURRENTLY` and create the `CONSTRAINT USING` the index.
 
-https://www.postgresql.org/docs/current/sql-altertable.html
+[sql-altertable](https://www.postgresql.org/docs/current/sql-altertable.html)
 
 Instead of:
 

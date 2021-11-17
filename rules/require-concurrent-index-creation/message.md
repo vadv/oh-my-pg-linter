@@ -1,8 +1,17 @@
-Создание индекса - потенциально тяжелая операция, при выполнении запроса при создании индекса доступ к таблице
-без ключевого слова `concurrently` будет заблокирован.
+Ensure all index creations use the `CONCURRENTLY` option.
+This rule ignores indexes added to tables created in the same transaction.
+During a normal index creation updates are blocked. `CONCURRENTLY` avoids the issue of blocking.
 
-Решение:
-Вместо: `CREATE INDEX "email_idx" ON "app_user" ("email")`.
-Используйте: `CREATE INDEX CONCURRENTLY "email_idx" ON "app_user" ("email");`.
+[SQL-CREATEINDEX-CONCURRENTLY](https://www.postgresql.org/docs/current/sql-createindex.html#SQL-CREATEINDEX-CONCURRENTLY)
 
-Документация: https://www.postgresql.org/docs/current/sql-createindex.html#SQL-CREATEINDEX-CONCURRENTLY
+# solutions
+
+Instead of:
+```sql
+CREATE INDEX "email_idx" ON "app_user" ("email");
+```
+
+Use:
+```sql
+CREATE INDEX CONCURRENTLY "email_idx" ON "app_user" ("email");
+```
