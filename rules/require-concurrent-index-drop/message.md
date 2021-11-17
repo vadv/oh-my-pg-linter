@@ -1,7 +1,10 @@
 # Problem
 
-Удаление индекса - потенциально тяжелая операция, при выполнении запроса при создании индекса доступ к таблице
-без ключевого слова `concurrently` будет заблокирован.
+Ensure all index deletions use the `CONCURRENTLY` option.
+This rule ignores indexes added to tables deleted in the same transaction.
+During a normal index delete updates are blocked. `CONCURRENTLY` avoids the issue of blocking.
+
+[SQL-CREATEINDEX-CONCURRENTLY](https://www.postgresql.org/docs/current/sql-createindex.html#SQL-CREATEINDEX-CONCURRENTLY)
 
 # Solutions
 

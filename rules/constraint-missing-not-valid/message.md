@@ -2,7 +2,7 @@
 
 Check that all new constraints have `NOT VALID`.
 
-By default new constraints require a table scan and block writes to the table while that scan occurs. Using NOT VALID with a later VALIDATE CONSTRAINT call prevents the table scan and results in the validation step only requiring a SHARE UPDATE EXCLUSIVE lock.
+By default, new constraints require a table scan and block writes to the table while that scan occurs. Using NOT VALID with a later VALIDATE CONSTRAINT call prevents the table scan and results in the validation step only requiring a SHARE UPDATE EXCLUSIVE lock.
 
 [SQL-ALTERTABLE-NOTES](https://www.postgresql.org/docs/current/sql-altertable.html#SQL-ALTERTABLE-NOTES)
 

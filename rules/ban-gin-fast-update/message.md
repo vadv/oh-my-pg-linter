@@ -1,6 +1,7 @@
 # Description
 
-Использование gin-индекса без fastupdate приводит к росту pending_list.  Это может привести что рандомный запрос начнет тормозить и не успеет за таймаут перепаковать данные.
+Using the gin index with fastupdate causes the `pending_list` to grow.
+This can lead to a random query is slow down and not being able to repack gin-data within query context timeout. 
 
 # Solution:
 
