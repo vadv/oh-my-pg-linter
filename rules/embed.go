@@ -6,5 +6,5 @@ import (
 )
 
 //go:embed *
-// Dir with embed files.
+// Dir ...
 var Dir embed.FS
