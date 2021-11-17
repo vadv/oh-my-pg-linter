@@ -2,6 +2,8 @@ package rules
 
 // Manager ...
 type Manager interface {
+	// AddRuleDir add rules from dir.
+	AddRuleDir(string) error
 	// ListRules is list of rules.
 	ListRules() []string
 	// Check file with rule.

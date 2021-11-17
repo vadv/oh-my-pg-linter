@@ -26,9 +26,8 @@ type manager struct {
 }
 
 // New returns new Manager.
-func New(dir string) (Manager, error) {
-	dir = filepath.Clean(dir)
-	m := &manager{directory: dir, state: NewState()}
+func New() Manager {
+	m := &manager{state: NewState()}
 	if errLoad := m.state.DoString(getTreeFromFileInLua); errLoad != nil {
 		panic(errLoad)
 	}
@@ -38,22 +37,27 @@ func New(dir string) (Manager, error) {
 	} else {
 		panic(fmt.Errorf("can't parse getTreeFromFileInLua: %v", luaVal))
 	}
-	files, errRead := ioutil.ReadDir(dir)
-	if errRead != nil {
-		return nil, errRead
-	}
 	m.rules = make(map[string]*lua.LFunction)
 	m.tests = make(map[string]*lua.LTable)
 	m.messages = make(map[string][]byte)
+	return m
+}
+
+func (m *manager) AddRuleDir(dir string) error {
+	dir = filepath.Clean(dir)
+	files, errRead := ioutil.ReadDir(dir)
+	if errRead != nil {
+		return errRead
+	}
 	for _, f := range files {
 		if !f.IsDir() {
 			continue
 		}
 		if err := loadRuleToManager(m, dir, f.Name()); err != nil {
-			return nil, err
+			return err
 		}
 	}
-	return m, nil
+	return nil
 }
 
 func (m *manager) ListRules() []string {

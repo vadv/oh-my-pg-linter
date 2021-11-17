@@ -15,8 +15,8 @@ func TestAll() *cobra.Command {
 	result.Use = "test-all"
 	result.Short = "Tests all rules."
 	result.Run = func(cmd *cobra.Command, args []string) {
-		manager, errManager := rules.New(viper.GetString("rules"))
-		if errManager != nil {
+		manager := rules.New()
+		if errManager := addRuleDirs(manager, viper.GetString("rules")); errManager != nil {
 			log.Fatal(fmt.Errorf("load manger: %w", errManager))
 		}
 		for _, r := range manager.ListRules() {

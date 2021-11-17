@@ -16,8 +16,8 @@ func Test() *cobra.Command {
 	result.Short = "Test rule."
 	result.Args = cobra.ExactArgs(1)
 	result.Run = func(cmd *cobra.Command, args []string) {
-		manager, errManager := rules.New(viper.GetString("rules"))
-		if errManager != nil {
+		manager := rules.New()
+		if errManager := addRuleDirs(manager, viper.GetString("rules")); errManager != nil {
 			log.Fatal(fmt.Errorf("load manger: %w", errManager))
 		}
 		if err := manager.Test(args[0]); err != nil {

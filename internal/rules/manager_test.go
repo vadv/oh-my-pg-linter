@@ -8,8 +8,8 @@ import (
 )
 
 func TestCheck(t *testing.T) {
-	m, err := rules.New("./tests/rules")
-	if err != nil {
+	m := rules.New()
+	if err := m.AddRuleDir("./tests/rules"); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := m.Check("", "unknown"); err == nil {
@@ -37,8 +37,8 @@ func TestCheck(t *testing.T) {
 }
 
 func TestRuleTest(t *testing.T) {
-	m, err := rules.New("./tests/rules")
-	if err != nil {
+	m := rules.New()
+	if err := m.AddRuleDir("./tests/rules"); err != nil {
 		t.Fatal(err)
 	}
 	if err := m.Test(`rule_3`); err != nil {
@@ -47,8 +47,8 @@ func TestRuleTest(t *testing.T) {
 }
 
 func TestRule2NoLint(t *testing.T) {
-	m, err := rules.New("./tests/rules")
-	if err != nil {
+	m := rules.New()
+	if err := m.AddRuleDir("./tests/rules"); err != nil {
 		t.Fatal(err)
 	}
 	r, errCheck := m.Check("./tests/migrations/test_no_lint.sql", "rule_2")
