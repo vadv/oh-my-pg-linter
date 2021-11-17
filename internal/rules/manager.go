@@ -2,30 +2,19 @@
 package rules
 
 import (
+	_ "embed"
 	"fmt"
 	"io/ioutil"
-	filepath2 "path/filepath"
+	"path/filepath"
 
 	lua "github.com/yuin/gopher-lua"
 )
 
-const (
-	preloadLibInLua = `
-filepath = require("filepath")
-inspect = require("inspect")
-json = require("json")
-parser = require("parser")
-`
-	getTreeFromFileInLua = `
-local function parseTree(content)
-	local parser = require("parser")
-	local result, err = parser.parse(content)
-	if err then error(err) end
-	return result
-end
-
-return parseTree 
-`
+var (
+	//go:embed parse_tree.lua
+	getTreeFromFileInLua string
+	//go:embed preload.lua
+	preloadLibInLua string
 )
 
 type manager struct {
@@ -39,7 +28,7 @@ type manager struct {
 
 // New returns new Manager.
 func New(dir string) (Manager, error) {
-	dir = filepath2.Clean(dir)
+	dir = filepath.Clean(dir)
 	m := &manager{directory: dir, state: NewState()}
 	if errLoad := m.state.DoString(preloadLibInLua); errLoad != nil {
 		panic(errLoad)

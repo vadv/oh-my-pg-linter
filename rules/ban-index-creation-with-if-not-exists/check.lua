@@ -5,7 +5,7 @@ local function check(tree)
     stmt = statement:tree()
     -- проверяем что statement на создание индекса
     if stmt.IndexStmt then
-      if stmt.IndexStmt.if_not_exists and stmt.IndexStmt.concurrent then
+      if stmt.IndexStmt.if_not_exists then
         table.insert(result, statement)
       end
     end

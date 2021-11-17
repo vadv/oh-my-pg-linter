@@ -17,7 +17,7 @@ import (
 func Check() *cobra.Command {
 	result := &cobra.Command{}
 	result.Use = "check [glob ...]"
-	result.Short = "Check files with migrations."
+	result.Short = "Check sql-files."
 	result.Run = func(cmd *cobra.Command, args []string) {
 		manager, errManager := rules.New(viper.GetString("rules"))
 		if errManager != nil {
@@ -35,11 +35,10 @@ func Check() *cobra.Command {
 					log.Fatal(errCheck)
 				}
 				if !check.Passed() {
-					q := ""
+					var q string
 					if check.Query() != nil {
-						q = *check.Query()
+						q = strings.Trim(strings.Trim(*check.Query(), " "), "\n")
 					}
-					q = strings.Trim(strings.Trim(q, " "), "\n")
 					fmt.Printf("%s:\n\tcheck rule `%s`\n\tquery: `%s`\n%s\n",
 						f, r, q, check.Message())
 					errorCount++
