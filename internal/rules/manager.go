@@ -2,6 +2,7 @@
 package rules
 
 import (
+	// embed files.
 	_ "embed"
 	"fmt"
 	"io/ioutil"
