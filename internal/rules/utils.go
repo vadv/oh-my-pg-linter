@@ -67,21 +67,21 @@ func (m *manager) runRule(content, rule string) (*response, error) {
 		NRet:    -1,
 		Protect: true,
 	}, lua.LString(content)); errCall != nil {
-		return nil, fmt.Errorf("parse tree: %w", errCall)
+		return nil, fmt.Errorf("rule %s: parse tree: %w", rule, errCall)
 	}
 	luaVal := m.state.Get(-1)
 	var tree *lua.LTable
 	if data, ok := luaVal.(*lua.LTable); ok {
 		tree = data
 	} else {
-		return nil, fmt.Errorf("can't parse tree: %v", luaVal)
+		return nil, fmt.Errorf("rule %s: can't parse tree: %v", rule, luaVal)
 	}
 	if err := m.state.CallByParam(lua.P{
 		Fn:      ruleFunc,
 		NRet:    -1,
 		Protect: true,
 	}, tree); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("run rule %s: %w", rule, err)
 	}
 	return m.rebuke(m.state.Get(-1), rule)
 }
