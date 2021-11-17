@@ -1,10 +1,12 @@
+# Problem
+
 Check that all new constraints have `NOT VALID`.
 
 By default new constraints require a table scan and block writes to the table while that scan occurs. Using NOT VALID with a later VALIDATE CONSTRAINT call prevents the table scan and results in the validation step only requiring a SHARE UPDATE EXCLUSIVE lock.
 
 [SQL-ALTERTABLE-NOTES](https://www.postgresql.org/docs/current/sql-altertable.html#SQL-ALTERTABLE-NOTES)
 
-# solution
+# Solution
 
 Instead of:
 ```sql
@@ -17,7 +19,7 @@ ALTER TABLE "accounts" ADD CONSTRAINT "positive_balance" CHECK ("balance" >= 0) 
 ALTER TABLE accounts VALIDATE CONSTRAINT positive_balance;
 ```
 
-# how "not valid, validate" works
+# How "not valid, validate" works
 
 When we add this constraint, writes to the accounts table will be blocked while the table is scanned to verify all positive_balance column entries match the check constraint "balance" >= 0.
 `ALTER TABLE "accounts" ADD CONSTRAINT "positive_balance" CHECK ("balance" >= 0);`

@@ -1,4 +1,4 @@
-# problem
+# Problem
 
 On Postgres versions less than 11, adding a field with a DEFAULT requires a table rewrite with an ACCESS EXCLUSIVE lock.
 
@@ -6,7 +6,7 @@ On Postgres versions less than 11, adding a field with a DEFAULT requires a tabl
 
 An `ACCESS EXCLUSIVE` lock blocks reads/writes while the statement is running.
 
-# solution
+# Solution
 
 Add the field as nullable, then set a default, backfill, and remove nullabilty.
 

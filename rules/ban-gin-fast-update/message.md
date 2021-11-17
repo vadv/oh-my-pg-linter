@@ -1,13 +1,15 @@
+# Description
+
 Использование gin-индекса без fastupdate приводит к росту pending_list.  Это может привести что рандомный запрос начнет тормозить и не успеет за таймаут перепаковать данные.
 
-Решение:
+# Solution:
 
-Вместо:
+Instead of:
 ```sql
 create index on inventory using gin(groups);
 ```
 
-Используйте: 
+Use: 
 ```sql
 create index on inventory using gin(groups) with (fastupdate = false)`
 ```

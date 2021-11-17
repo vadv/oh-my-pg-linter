@@ -1,10 +1,12 @@
+# Problem
+
 Ensure all index creations use the `CONCURRENTLY` option.
 This rule ignores indexes added to tables created in the same transaction.
 During a normal index creation updates are blocked. `CONCURRENTLY` avoids the issue of blocking.
 
 [SQL-CREATEINDEX-CONCURRENTLY](https://www.postgresql.org/docs/current/sql-createindex.html#SQL-CREATEINDEX-CONCURRENTLY)
 
-# solutions
+# Solutions
 
 Instead of:
 ```sql

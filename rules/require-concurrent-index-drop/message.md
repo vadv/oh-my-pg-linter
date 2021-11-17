@@ -1,12 +1,16 @@
+# Problem
+
 Удаление индекса - потенциально тяжелая операция, при выполнении запроса при создании индекса доступ к таблице
 без ключевого слова `concurrently` будет заблокирован.
 
-Вместо:
+# Solutions
+
+Instead of:
 ```sql
 DROP INDEX "email_idx";
 ```
 
-Используйте:
+Use:
 ```sql
 DROP INDEX CONCURRENTLY "email_idx"
 ```

@@ -1,10 +1,12 @@
+# Description
+
 Use a check constraint instead of setting a column as `NOT NULL`.
 
-# problem
+# Problem
 
 Adding a column as NOT NULL requires a table scan and the ALTER TABLE requires an ACCESS EXCLUSIVE lock. Reads and writes will be disabled while this statement is running.
 
-# solutions
+# Solutions
 
 adding a non-nullable column
 

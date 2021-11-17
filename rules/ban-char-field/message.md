@@ -1,3 +1,5 @@
+# Description
+
 Using character is likely a mistake and should almost always be replaced by text.
 
 From the postgres docs:

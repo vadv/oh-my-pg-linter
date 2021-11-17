@@ -40,8 +40,18 @@ func Check() *cobra.Command {
 					if check.Query() != nil {
 						q = strings.Trim(strings.Trim(*check.Query(), " "), "\n")
 					}
-					data := markdown.Render(fmt.Sprintf("%s\n\trule: `%s`\n\tquery: `%s`\n%s\n",
-						f, r, q, check.Message()), 120, 2)
+					data := markdown.Render(fmt.Sprintf(""+
+						"# File\n[%s](%s)\n"+
+						"# Rule\n`%s`\n"+
+						"# Statement\n"+
+						"```sql\n"+
+						"%s\n"+
+						"```"+
+						"\n%s\n",
+						filepath.Base(f), f,
+						r,
+						q,
+						check.Message()), 140, 2)
 					fmt.Printf("%s\n", data)
 					errorCount++
 				}
@@ -49,7 +59,7 @@ func Check() *cobra.Command {
 		}
 		if errorCount != 0 {
 			fmt.Printf("%s\n", strings.Repeat("-", 20))
-			fmt.Printf("Found %d errors.\n", errorCount)
+			fmt.Printf("Found %d error(s).\n", errorCount)
 			os.Exit(errorCount)
 		}
 	}
