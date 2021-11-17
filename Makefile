@@ -12,7 +12,7 @@ test-rules: build
 	./bin/oh-my-pg-linter -r $(RULES_DIR) test-all
 
 build:
-	go build -o ./bin/oh-my-pg-linter ./cmd
+	go build -o ./bin/oh-my-pg-linter
 
 test: test-rules
 	go test ./... -v -race

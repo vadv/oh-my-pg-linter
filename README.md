@@ -6,6 +6,8 @@
 oh-my-pg-linter check ./migrations/*.sql
 ```
 
+Дополнительные проверки:
+
 ```shell
 oh-my-pg-linter check --rules=/path/to/additional/dir/with/rules:/and/another/dir/rules ./migrations/*.sql
 ```
@@ -24,6 +26,12 @@ oh-my-pg-linter --rules=/etc/oh-my-pg-linter/rules test-all
 
 ```shell
 oh-my-pg-linter run ./file.lua
+```
+
+# Установка
+
+```shell
+go install github.com/vadv/oh-my-pg-linter@latest
 ```
 
 # Как написать проверку
