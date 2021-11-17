@@ -13,8 +13,6 @@ import (
 var (
 	//go:embed parse_tree.lua
 	getTreeFromFileInLua string
-	//go:embed preload.lua
-	preloadLibInLua string
 )
 
 type manager struct {
@@ -30,9 +28,6 @@ type manager struct {
 func New(dir string) (Manager, error) {
 	dir = filepath.Clean(dir)
 	m := &manager{directory: dir, state: NewState()}
-	if errLoad := m.state.DoString(preloadLibInLua); errLoad != nil {
-		panic(errLoad)
-	}
 	if errLoad := m.state.DoString(getTreeFromFileInLua); errLoad != nil {
 		panic(errLoad)
 	}
