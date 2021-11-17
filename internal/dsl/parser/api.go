@@ -13,14 +13,36 @@ const (
 	userDataNameStmt = `user_data_stmt`
 )
 
-type luaStmt struct {
-	query string
-	json  lua.LValue
+// Stmt ...
+type Stmt struct {
+	query   string
+	json    lua.LValue
+	noLints []string
 }
 
-func checkStmt(L *lua.LState, n int) *luaStmt {
+// NoLints ...
+func (s *Stmt) NoLints() []string {
+	return s.noLints
+}
+
+// IsNoLint ...
+func (s *Stmt) IsNoLint(rule string) bool {
+	for _, x := range s.noLints {
+		if rule == x {
+			return true
+		}
+	}
+	return false
+}
+
+// Query ...
+func (s *Stmt) Query() string {
+	return s.query
+}
+
+func checkStmt(L *lua.LState, n int) *Stmt {
 	ud := L.CheckUserData(n)
-	if v, ok := ud.Value.(*luaStmt); ok {
+	if v, ok := ud.Value.(*Stmt); ok {
 		return v
 	}
 	L.ArgError(n, "ud expected")
@@ -38,6 +60,14 @@ func Query(L *lua.LState) int {
 func Tree(L *lua.LState) int {
 	stmt := checkStmt(L, 1)
 	L.Push(stmt.json)
+	return 1
+}
+
+// IsNoLint ud:is_no_lint(rulename) returns bool.
+func IsNoLint(L *lua.LState) int {
+	stmt := checkStmt(L, 1)
+	val := L.CheckString(2)
+	L.Push(lua.LBool(stmt.IsNoLint(val)))
 	return 1
 }
 
@@ -88,7 +118,7 @@ func Parse(L *lua.LState) int {
 			L.Push(lua.LString(fmt.Sprintf("parsing of %#v must be table with stmt", query)))
 			return 2
 		}
-		l := &luaStmt{json: tbl.RawGetString("stmt"), query: query}
+		l := &Stmt{json: tbl.RawGetString("stmt"), query: query, noLints: NoLintParse(query)}
 		ud := L.NewUserData()
 		ud.Value = l
 		L.SetMetatable(ud, L.GetTypeMetatable(userDataNameStmt))

@@ -1,15 +1,16 @@
 local function check(tree)
+  local result = {}
   local stmt
   for _, statement in pairs(tree) do
     -- проверяем что statement на drop индекса
     stmt = statement:tree()
     if stmt.DropStmt and (stmt.DropStmt.removeType == "OBJECT_INDEX") then
       if not(stmt.DropStmt.concurrent) then
-        return statement:query()
+        table.insert(result, statement)
       end
     end
   end
-  return nil
+  return result
 end
 
 return check

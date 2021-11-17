@@ -17,8 +17,9 @@ func Loader(L *lua.LState) int {
 	ud := L.NewTypeMetatable(userDataNameStmt)
 	L.SetGlobal(userDataNameStmt, ud)
 	L.SetField(ud, "__index", L.SetFuncs(L.NewTable(), map[string]lua.LGFunction{
-		"query": Query,
-		"tree":  Tree,
+		"query":      Query,
+		"tree":       Tree,
+		"is_no_lint": IsNoLint,
 	}))
 
 	t := L.NewTable()

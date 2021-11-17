@@ -1,5 +1,6 @@
 local function check(tree)
   local stmt
+  local result = {}
   for _, statement in pairs(tree) do
     stmt = statement:tree()
     -- проверяем что statement на создание индекса
@@ -15,24 +16,12 @@ local function check(tree)
           end
         end
         if fastupdate then
-          return "Запрос: "..statement:query()..[[
-
-Использование gin-индекса без fastupdate приводит к росту pending_list.
-Это может привести что рандомный запрос начнет тормозить и не успеет за таймаут перепаковать данные.
-
-Решение:
-Вместо: `create index on inventory using gin(groups);`.
-Используйте: `create index on inventory using gin(groups) with (fastupdate = false);`.
-
-
-Документация: https://postgrespro.ru/docs/postgrespro/9.5/gin-tips
-
-]]
+          table.insert(result, statement)
         end
       end
     end
   end
-  return nil
+  return result
 end
 
 return check

@@ -1,5 +1,6 @@
 local function check(_)
-  return nil
+  local result = {}
+  return result
 end
 
 return check

@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -34,9 +35,13 @@ func Check() *cobra.Command {
 					log.Fatal(errCheck)
 				}
 				if !check.Passed() {
-					message := string(check.Message())
-					fmt.Printf("%s: check rule %s:\n%s",
-						f, r, message)
+					q := ""
+					if check.Query() != nil {
+						q = *check.Query()
+					}
+					q = strings.Trim(strings.Trim(q, " "), "\n")
+					fmt.Printf("%s:\n\tcheck rule `%s`\n\tquery: `%s`\n%s\n",
+						f, r, q, check.Message())
 					errorCount++
 				}
 			}

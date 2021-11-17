@@ -1,6 +1,7 @@
 package rules_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/vadv/oh-my-pg-linter/internal/rules"
@@ -17,7 +18,7 @@ func TestCheck(t *testing.T) {
 	for _, r := range m.ListRules() {
 		res, err := m.Check("./tests/migrations/test.sql", r)
 		if err != nil {
-			t.Fatal(err)
+			t.Fatalf("test rule %s: %s", r, err)
 		}
 		switch r {
 		case "rule_1":
@@ -28,8 +29,8 @@ func TestCheck(t *testing.T) {
 			if res.Passed() {
 				t.Fatal("must not passed")
 			}
-			if string(res.Message()) != "error" {
-				t.Fatal(res.Message())
+			if string(res.Message()) != "rule_2 test\n" {
+				t.Fatalf("%s", res.Message())
 			}
 		}
 	}
@@ -42,5 +43,22 @@ func TestRuleTest(t *testing.T) {
 	}
 	if err := m.Test(`rule_3`); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestRule2NoLint(t *testing.T) {
+	m, err := rules.New("./tests/rules")
+	if err != nil {
+		t.Fatal(err)
+	}
+	r, errCheck := m.Check("./tests/migrations/test_no_lint.sql", "rule_2")
+	if errCheck != nil {
+		t.Fatal(errCheck)
+	}
+	if r.Passed() {
+		t.Fatal(r.Passed())
+	}
+	if q := *r.Query(); !strings.Contains(q, `email_must_lint_idx`) {
+		t.Fatal(q)
 	}
 }

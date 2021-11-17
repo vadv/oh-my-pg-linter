@@ -5,7 +5,7 @@ type Manager interface {
 	// ListRules is list of rules.
 	ListRules() []string
 	// Check file with rule.
-	Check(file, rule string) (response Response, err error)
+	Check(file, rule string) (Response, error)
 	// Test rule.
 	Test(rule string) error
 }
@@ -14,4 +14,5 @@ type Manager interface {
 type Response interface {
 	Passed() bool
 	Message() []byte
+	Query() *string
 }
