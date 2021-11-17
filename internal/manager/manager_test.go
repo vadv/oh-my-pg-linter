@@ -1,14 +1,14 @@
-package rules_test
+package manager_test
 
 import (
 	"strings"
 	"testing"
 
-	"github.com/vadv/oh-my-pg-linter/internal/rules"
+	"github.com/vadv/oh-my-pg-linter/internal/manager"
 )
 
 func TestCheck(t *testing.T) {
-	m := rules.New()
+	m := manager.New()
 	if err := m.AddRuleDir("./tests/rules"); err != nil {
 		t.Fatal(err)
 	}
@@ -37,7 +37,7 @@ func TestCheck(t *testing.T) {
 }
 
 func TestRuleTest(t *testing.T) {
-	m := rules.New()
+	m := manager.New()
 	if err := m.AddRuleDir("./tests/rules"); err != nil {
 		t.Fatal(err)
 	}
@@ -47,7 +47,7 @@ func TestRuleTest(t *testing.T) {
 }
 
 func TestRule2NoLint(t *testing.T) {
-	m := rules.New()
+	m := manager.New()
 	if err := m.AddRuleDir("./tests/rules"); err != nil {
 		t.Fatal(err)
 	}

@@ -1,9 +1,8 @@
-// Package rules ...
-package rules
+// Package manager ...
+package manager
 
 import (
-	// embed files.
-	_ "embed"
+	"embed"
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
@@ -17,7 +16,6 @@ var (
 )
 
 type manager struct {
-	directory string
 	state     *lua.LState
 	rules     map[string]*lua.LFunction
 	tests     map[string]*lua.LTable
@@ -43,17 +41,34 @@ func New() Manager {
 	return m
 }
 
-func (m *manager) AddRuleDir(dir string) error {
-	dir = filepath.Clean(dir)
-	files, errRead := ioutil.ReadDir(dir)
+func (m *manager) AddRuleDir(path string) error {
+	path = filepath.Clean(path)
+	files, errRead := ioutil.ReadDir(path)
 	if errRead != nil {
 		return errRead
 	}
-	for _, f := range files {
-		if !f.IsDir() {
+	for _, d := range files {
+		if !d.IsDir() {
 			continue
 		}
-		if err := loadRuleToManager(m, dir, f.Name()); err != nil {
+		if err := loadRuleToManager(m, &fsBox{}, path, d.Name()); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (m *manager) AddEmbed(fs embed.FS) error {
+	b := &embedBox{embed: fs}
+	files, errRead := b.embed.ReadDir(".")
+	if errRead != nil {
+		return errRead
+	}
+	for _, dir := range files {
+		if !dir.IsDir() {
+			continue
+		}
+		if err := loadRuleToManager(m, b, ".", dir.Name()); err != nil {
 			return err
 		}
 	}

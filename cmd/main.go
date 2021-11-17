@@ -21,7 +21,7 @@ func main() {
 		Use:     "oh-my-pg-linter",
 		Version: AppVersion,
 	}
-	rootCmd.PersistentFlags().StringP("rules", "r", ".", "Path to directory with rules.")
+	rootCmd.PersistentFlags().StringP("rules", "r", "", "Path to directory with additional rules.")
 	if err := viper.BindPFlags(rootCmd.PersistentFlags()); err != nil {
 		log.Fatal(err)
 	}

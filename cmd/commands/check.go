@@ -11,7 +11,8 @@ import (
 	markdown "github.com/MichaelMure/go-term-markdown"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/vadv/oh-my-pg-linter/internal/rules"
+	"github.com/vadv/oh-my-pg-linter/internal/manager"
+	"github.com/vadv/oh-my-pg-linter/rules"
 )
 
 // Check ...
@@ -20,11 +21,20 @@ func Check() *cobra.Command {
 	result.Use = "check [glob ...]"
 	result.Short = "Check sql-files."
 	var varExcludeRules string
-	result.Flags().StringVar(&varExcludeRules, "exclude", "", "Exclude rules (delimited by `,`).")
+	var loadEmbed bool
+	result.Flags().StringVarP(&varExcludeRules, "exclude", "e", "", "Exclude rules (delimited by ',')")
+	result.Flags().BoolVarP(&loadEmbed, "embed", "", true, "Load embed rules")
 	result.Run = func(cmd *cobra.Command, args []string) {
-		manager := rules.New()
-		if errManager := addRuleDirs(manager, viper.GetString("rules")); errManager != nil {
-			log.Fatal(fmt.Errorf("load manger: %w", errManager))
+		m := manager.New()
+		if loadEmbed {
+			if errEmbed := m.AddEmbed(rules.Dir); errEmbed != nil {
+				log.Fatal(fmt.Errorf("load embed rules: %w", errEmbed))
+			}
+		}
+		if ruleDirs := viper.GetString("rules"); ruleDirs != "" {
+			if errManager := addRuleDirs(m, ruleDirs); errManager != nil {
+				log.Fatal(fmt.Errorf("load rule: %w", errManager))
+			}
 		}
 		files, errGlob := getListOfFiles(args)
 		if errGlob != nil {
@@ -33,11 +43,11 @@ func Check() *cobra.Command {
 		excludeRules := strings.Split(varExcludeRules, ",")
 		var errorCount int
 		for _, f := range files {
-			for _, r := range manager.ListRules() {
+			for _, r := range m.ListRules() {
 				if skipRule(r, excludeRules) {
 					continue
 				}
-				check, errCheck := manager.Check(f, r)
+				check, errCheck := m.Check(f, r)
 				if errCheck != nil {
 					log.Fatal(errCheck)
 				}

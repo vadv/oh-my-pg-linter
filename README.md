@@ -3,7 +3,11 @@
 Проверить миграции:
 
 ```shell
-oh-my-pg-linter --rules=/etc/oh-my-pg-linter/rules check ./migrations/*.sql
+oh-my-pg-linter check ./migrations/*.sql
+```
+
+```shell
+oh-my-pg-linter check --rules=/path/to/additional/dir/with/rules:/and/another/dir/rules ./migrations/*.sql
 ```
 
 Проверить тесты:

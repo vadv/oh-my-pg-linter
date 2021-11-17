@@ -1,4 +1,4 @@
-package rules
+package manager
 
 type response struct {
 	passed  bool

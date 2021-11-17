@@ -1,4 +1,4 @@
-package rules
+package manager
 
 import (
 	"github.com/vadv/oh-my-pg-linter/internal/dsl/filepath"

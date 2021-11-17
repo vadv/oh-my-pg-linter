@@ -1,61 +1,11 @@
-package rules
+package manager
 
 import (
-	"errors"
 	"fmt"
-	"io/ioutil"
-	"os"
-	"path/filepath"
 
 	"github.com/vadv/oh-my-pg-linter/internal/dsl/parser"
 	lua "github.com/yuin/gopher-lua"
 )
-
-func loadRuleToManager(m *manager, dir, ruleName string) error {
-	// check
-	checkData, errReadCheck := ioutil.ReadFile(filepath.Join(dir, ruleName, "check.lua"))
-	if errReadCheck != nil {
-		return errReadCheck
-	}
-	if errDo := m.state.DoString(string(checkData)); errDo != nil {
-		return fmt.Errorf("load rule %s: %w", ruleName, errDo)
-	}
-	luaVal := m.state.Get(-1)
-	if fun, ok := luaVal.(*lua.LFunction); ok {
-		m.rules[ruleName] = fun
-	} else {
-		return fmt.Errorf("load rule %s: return must be a function", ruleName)
-	}
-	// messages
-	messageFilename := filepath.Join(dir, ruleName, "message.md")
-	if _, errStat := os.Stat(messageFilename); errStat == nil {
-		data, errReadMessage := ioutil.ReadFile(messageFilename)
-		if errReadMessage != nil {
-			return errReadMessage
-		}
-		m.messages[ruleName] = data
-	}
-	// tests
-	testFilename := filepath.Join(dir, ruleName, "test.lua")
-	m.tests[ruleName] = m.state.NewTable()
-	if _, errStat := os.Stat(testFilename); errors.Is(errStat, os.ErrNotExist) {
-		return nil
-	}
-	testData, errReadTest := ioutil.ReadFile(testFilename)
-	if errReadTest != nil {
-		return errReadTest
-	}
-	if errDo := m.state.DoString(string(testData)); errDo != nil {
-		return fmt.Errorf("load test of rule %s: %w", ruleName, errDo)
-	}
-	luaVal = m.state.Get(-1)
-	if table, ok := luaVal.(*lua.LTable); ok {
-		m.tests[ruleName] = table
-	} else {
-		return fmt.Errorf("load test of rule %s: return must be a table", ruleName)
-	}
-	return nil
-}
 
 func (m *manager) runRule(content, rule string) (*response, error) {
 	ruleFunc, okFunc := m.rules[rule]
