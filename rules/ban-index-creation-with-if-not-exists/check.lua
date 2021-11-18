@@ -1,5 +1,6 @@
 local function check(tree)
-  local stmt, result = nil, {}
+  local stmt
+  local result = {}
   for _, statement in pairs(tree) do
     stmt = statement:tree()
     if stmt.IndexStmt and stmt.IndexStmt.if_not_exists then
