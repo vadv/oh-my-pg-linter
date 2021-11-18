@@ -15,14 +15,14 @@ Use:
 DO
 $$
     BEGIN
-        IF EXISTS(
-            SELECT indexrelid::oid::regclass FROM pg_index WHERE NOT indisvalid AND indexrelid::oid::regclass::TEXT = 'dist_id_temp_idx'
+        IF EXISTS (
+              SELECT indexrelid::oid::regclass FROM pg_index WHERE NOT indisvalid AND indexrelid::oid::regclass::TEXT = 'dist_id_temp_idx'
             )
         THEN
             DROP INDEX dist_id_temp_idx;
         END IF;
-        IF EXISTS(
-            SELECT indexrelid::oid::regclass FROM pg_index WHERE indexrelid::oid::regclass::TEXT = 'dist_id_temp_idx'
+        IF NOT EXISTS (
+              SELECT indexrelid::oid::regclass FROM pg_index WHERE indexrelid::oid::regclass::TEXT = 'dist_id_temp_idx'
             )
         THEN
             CREATE INDEX CONCURRENTLY dist_id_temp_idx ON distributors (dist_id);

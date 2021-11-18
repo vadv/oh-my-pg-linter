@@ -6,7 +6,7 @@
 oh-my-pg-linter check ./migrations/*.sql
 ```
 
-Дополнительные проверки:
+Добавить директории с дополнительными проверками (переопределение - кто последний тот и папа):
 
 ```shell
 oh-my-pg-linter check --rules=/path/to/additional/dir/with/rules:/and/another/dir/rules ./migrations/*.sql
@@ -22,7 +22,7 @@ oh-my-pg-linter --rules=/etc/oh-my-pg-linter/rules test ban-gin-fast-update
 oh-my-pg-linter --rules=/etc/oh-my-pg-linter/rules test-all
 ```
 
-Запустить lua-файл:
+Запустить lua-файл (тестирование):
 
 ```shell
 oh-my-pg-linter run ./file.lua

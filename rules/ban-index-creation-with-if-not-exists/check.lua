@@ -1,13 +1,9 @@
 local function check(tree)
-  local stmt
-  local result = {}
+  local stmt, result = nil, {}
   for _, statement in pairs(tree) do
     stmt = statement:tree()
-    -- проверяем что statement на создание индекса
-    if stmt.IndexStmt then
-      if stmt.IndexStmt.if_not_exists then
-        table.insert(result, statement)
-      end
+    if stmt.IndexStmt and stmt.IndexStmt.if_not_exists then
+      table.insert(result, statement)
     end
   end
   return result
