@@ -6,6 +6,8 @@ On Postgres versions less than 11, adding a field with a DEFAULT requires a tabl
 
 An `ACCESS EXCLUSIVE` lock blocks reads/writes while the statement is running.
 
+Postgres version 11 and newer still requires the entire table and its indexes to be rewritten with an ACCESS EXCLUSIVE lock in case of adding a column with a volatile DEFAULT e.g. random(), clock_timestamp().
+
 # Solution
 
 Add the field as nullable, then set a default, backfill, and remove nullabilty.
